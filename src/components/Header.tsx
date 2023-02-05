@@ -8,13 +8,12 @@ export default function Header() {
 
   const handleEndCurrentEvent = () => {
     const date = new Date();
-    axios.post("http://localhost:4000/event", {
-      date: date.toISOString().split("T")[0],
-      shortDescription: "event 1",
-      endTime: {
-        hour: date.getHours(),
-        minutes: date.getMinutes(),
-      },
+    axios.post("http://localhost:4000/events", {
+      title: "event name",
+      localDate: "2023-02-05".split("-").join(""),
+      localTime: "17:33".split(":").join(""),
+      tags: ["tag1", "tag2"],
+      description: "description",
     });
   };
 
@@ -22,7 +21,7 @@ export default function Header() {
     <header className={c.container} style={{ height: headerHeight }}>
       <h1 className={c.title}>TimeLine</h1>
       <button className={c.button} onClick={handleEndCurrentEvent}>
-        End Task
+        Close Event
       </button>
     </header>
   );

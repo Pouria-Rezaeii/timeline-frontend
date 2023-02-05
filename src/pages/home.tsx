@@ -9,11 +9,11 @@ export default function Home() {
   const c = useStyles();
 
   React.useEffect(() => {
-    axios.get("http://localhost:4000").then(({ data }) => console.log(data));
+    axios.get("http://localhost:4000/events").then(({ data }) => console.log(data));
   }, []);
 
   const handleClick = () => {
-    axios.get("http://localhost:4000").then(({ data }) => console.log(data));
+    axios.get("http://localhost:4000/events").then(({ data }) => console.log(data));
   };
 
   const fakeItems = [
@@ -27,6 +27,8 @@ export default function Home() {
     },
   ];
 
+  const d = new Date();
+
   return (
     <div className={c.container}>
       <div className={c.headerBox}>
@@ -35,6 +37,18 @@ export default function Home() {
       <div className={c.contentBox}>
         <div style={{ display: "flex", justifyContent: "flex-end", paddingBottom: "3rem" }}>
           <button onClick={handleClick}>Fetch</button>
+          <input
+            type="date"
+            // value={new Date().toLocaleDateString()}
+            onChange={(e) => console.log(e.target.value)}
+            className={c.input}
+          />
+          <input
+            type="time"
+            // value={`${d.getHours()}:${d.getMinutes()}`}
+            onChange={(e) => console.log(e.target.value)}
+            className={c.input}
+          />
         </div>
         {fakeItems.map((item) => (
           <div key={v4()} className={c.row}>
@@ -80,5 +94,15 @@ const useStyles = makeStyles((theme: any) => ({
     display: "flex",
     borderRadius: 8,
     overflow: "hidden",
+  },
+  input: {
+    fontSize: 20,
+    padding: 8,
+    fontWeight: 400,
+    fill: "red",
+    border: "none",
+    outline: "none",
+    backgroundColor: "#ddd",
+    borderRadius: 2,
   },
 }));

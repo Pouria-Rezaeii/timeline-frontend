@@ -2,32 +2,10 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import Header from "../components/Header";
 import { headerHeight } from "../services/sizes";
-import { v4 } from "uuid";
-import { axios } from "../services/axios";
+import Timelines from "../components/Timelines";
 
 export default function Home() {
-  const c = useStyles();
-
-  React.useEffect(() => {
-    axios.get("http://localhost:4000/events").then(({ data }) => console.log(data));
-  }, []);
-
-  const handleClick = () => {
-    axios.get("http://localhost:4000/events").then(({ data }) => console.log(data));
-  };
-
-  const fakeItems = [
-    {
-      date: new Date().getDate(),
-      issues: [
-        { name: "first task", endTime: 5, color: "blue" },
-        { name: "secondTask", endTime: 18, color: "green" },
-        { name: "third", endTime: 21, color: "red" },
-      ],
-    },
-  ];
-
-  const d = new Date();
+  const c = styles();
 
   return (
     <div className={c.container}>
@@ -35,65 +13,35 @@ export default function Home() {
         <Header />
       </div>
       <div className={c.contentBox}>
-        <div style={{ display: "flex", justifyContent: "flex-end", paddingBottom: "3rem" }}>
-          <button onClick={handleClick}>Fetch</button>
-          <input
-            type="date"
-            // value={new Date().toLocaleDateString()}
-            onChange={(e) => console.log(e.target.value)}
-            className={c.input}
-          />
-          <input
-            type="time"
-            // value={`${d.getHours()}:${d.getMinutes()}`}
-            onChange={(e) => console.log(e.target.value)}
-            className={c.input}
-          />
-        </div>
-        {fakeItems.map((item) => (
-          <div key={v4()} className={c.row}>
-            {item.issues.map((i, index) => {
-              const width =
-                (((index === 0 ? i.endTime : i.endTime - item.issues[index - 1].endTime) * 60) /
-                  (24 * 60)) *
-                100;
-
-              return (
-                <div
-                  key={v4()}
-                  style={{ height: "100%", width: `${width}%`, backgroundColor: i.color }}
-                >
-                  {i.name}
-                </div>
-              );
-            })}
-          </div>
-        ))}
+        <Timelines />
       </div>
     </div>
   );
 }
 
-const useStyles = makeStyles((theme: any) => ({
-  container: {},
+const styles = makeStyles((theme) => ({
+  container: {
+    minHeight: `calc(100vh - ${headerHeight}px)`,
+  },
   headerBox: {
     position: "fixed",
+    zIndex: 1000,
     left: 0,
     right: 0,
     top: 0,
+    [theme.mobileSize]: {
+      top: `calc(100vh - ${headerHeight}px)`,
+    },
   },
   contentBox: {
     marginTop: headerHeight,
     padding: "2rem",
-  },
-  row: {
-    padding: 0,
-    height: "1rem",
-    width: "100%",
-    border: "solid 1px #aaa",
-    display: "flex",
-    borderRadius: 8,
-    overflow: "hidden",
+    paddingTop: "15rem",
+    [theme.mobileSize]: {
+      marginTop: 0,
+      padding: "1rem",
+      paddingTop: "12rem",
+    },
   },
   input: {
     fontSize: 20,
@@ -104,5 +52,6 @@ const useStyles = makeStyles((theme: any) => ({
     outline: "none",
     backgroundColor: "#ddd",
     borderRadius: 2,
+    cursor: "pointer",
   },
 }));

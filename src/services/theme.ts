@@ -1,10 +1,10 @@
-import {tabletSize} from "./sizes";
+import { tabletSize } from "./sizes";
 
 export const theme = {
   palette: {
     primary: {
       light: "#27C09F",
-      main: "#029F85",
+      main: "#565282",
       dark: "#049575",
     },
     secondary: {

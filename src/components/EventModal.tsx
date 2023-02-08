@@ -5,24 +5,27 @@ import { axios } from "../services/axios";
 import clsx from "clsx";
 import dateFormat from "dateformat";
 import Select from "react-dropdown-select";
+import { Tag } from "../services/types/Tag.type";
+import { useTags } from "../services/TagsContext";
 
 interface IProps {
   onClickClose?: () => void;
 }
 
-export default function CloseEventModal(props: IProps) {
+export default function EventModal(props: IProps) {
   const now = new Date();
+  const { tags } = useTags();
   const [date, setDate] = React.useState(dateFormat(now, "yyyy-mm-dd"));
   const [time, setTime] = React.useState(dateFormat(now, "HH:MM"));
   const [title, setTitle] = React.useState("");
-  const [tags, setTags] = React.useState<{ value: string; label: string }[]>([]);
+  const [selectedTags, setSelectedTags] = React.useState<{ value: string; label: string }[]>([]);
   const [description, setDescription] = React.useState("");
   const c = useStyles();
 
   const handleClose = () => props.onClickClose?.();
 
   const handleAccept = () => {
-    if (!title || !tags.length) {
+    if (!title || !selectedTags.length) {
       alert("Please fill all fields.");
       return;
     }
@@ -30,12 +33,15 @@ export default function CloseEventModal(props: IProps) {
       title,
       localDate: date.split("-").join(""),
       localTime: time.split(":").join(""),
-      tags: tags?.map((item) => item.value),
-      description,
+      tags: selectedTags.map((item) => item.value),
+      description: description || null,
     };
     axios
       .post("events", data)
-      .then(() => props.onClickClose?.())
+      .then(() => {
+        props.onClickClose?.();
+        // alert("Done");
+      })
       .catch((err) =>
         alert(
           JSON.stringify(data, null, 4).concat(
@@ -44,12 +50,6 @@ export default function CloseEventModal(props: IProps) {
         )
       );
   };
-
-  const options = [
-    { value: "1", label: "Leanne Graham " },
-    { value: "2", label: "Ervin Howell" },
-    { value: "3", label: "John Eastwood" },
-  ];
 
   return (
     <Overlay onClickBackdrop={handleClose}>
@@ -77,9 +77,9 @@ export default function CloseEventModal(props: IProps) {
           className={c.input}
         />
         <Select
-          values={tags}
-          options={options}
-          onChange={(values) => setTags(values as any)}
+          values={selectedTags}
+          options={tags.map((item) => ({ label: item.name, value: item._id }))}
+          onChange={(values) => setSelectedTags(values as any)}
           multi
           style={{ maxWidth: 250 }}
           className={c.select}

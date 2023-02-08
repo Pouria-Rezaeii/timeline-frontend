@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import Header from "../components/Header";
+import Navigation from "../components/Navigation";
 import { headerHeight } from "../services/sizes";
 import Timelines from "../components/Timelines";
 
@@ -9,9 +9,7 @@ export default function Home() {
 
   return (
     <div className={c.container}>
-      <div className={c.headerBox}>
-        <Header />
-      </div>
+      <Navigation />
       <div className={c.contentBox}>
         <Timelines />
       </div>
@@ -22,16 +20,6 @@ export default function Home() {
 const styles = makeStyles((theme) => ({
   container: {
     minHeight: `calc(100vh - ${headerHeight}px)`,
-  },
-  headerBox: {
-    position: "fixed",
-    zIndex: 1000,
-    left: 0,
-    right: 0,
-    top: 0,
-    [theme.mobileSize]: {
-      top: `calc(100vh - ${headerHeight}px)`,
-    },
   },
   contentBox: {
     marginTop: headerHeight,

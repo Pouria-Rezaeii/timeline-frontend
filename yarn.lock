@@ -6005,6 +6005,11 @@ jest@^27.4.3:
     import-local "^3.0.2"
     jest-cli "^27.5.1"
 
+js-media-query@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/js-media-query/-/js-media-query-1.0.5.tgz#94f0a915c3c7877464d95b69e0bc8f7ea60a6229"
+  integrity sha512-GcfjArIKY/bvylLEOejG/kZasDky7/pD6iGYKBjMEoPsv9yxxlxvYVCIPxHnX+Q7Id+zmTmHnQxyZ6wfWYsXkA==
+
 js-sdsl@^4.1.4:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"

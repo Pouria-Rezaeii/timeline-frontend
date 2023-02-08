@@ -33,8 +33,9 @@ const useStyles = makeStyles({
     left: 0,
     display: "flex",
     justifyContent: "center",
-    alignItems: "flex-start",
-    paddingTop: "15vh",
+    alignItems: "center",
+    // paddingTop: "15vh",
+
     backdropFilter: "blur(1px)",
   },
 });

@@ -1,46 +1,56 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
 import { v4 } from "uuid";
+import { Timeline as TimelineType } from "../services/types/Timeline.type";
+import { useTags } from "../services/TagsContext";
 
-interface Timeline {
-  date: string;
-  events: {
-    description: string;
-    localTime: string;
-    tags: [string, string];
-    title: string;
-    width: string;
-  }[];
+interface IProps {
+  timeline: TimelineType;
 }
 
-const tempColors = [
-  "#F84A54",
-  "#F28A35",
-  "#FAB52A",
-  "#7FBB4E",
-  "#31BCAF",
-  "#1E7985",
-  "#34ABF3",
-  "#267FC7",
-  "#7A75AF",
-  "#F55EA8",
-];
-
-export default function Timeline(props: { timeline: Timeline }) {
+export default function Timeline(props: IProps) {
+  const { timeline } = props;
   const c = useStyles();
+  const { tags } = useTags();
+
+  const getColor = (id: string) => tags.find((item) => item._id === id)?.color;
+
+  const getWidth = (index: number) => {
+    const currentItem = timeline.events[index];
+    const prevItem = index === 0 ? null : timeline.events[index - 1];
+
+    const currentTimeInMinutes =
+      Number(currentItem.localTime.slice(0, 2)) * 60 + Number(currentItem.localTime.slice(2, 4));
+    const prevItemTimeInMinutes =
+      index === 0
+        ? 0
+        : Number(prevItem!.localTime.slice(0, 2)) * 60 + Number(prevItem!.localTime.slice(2, 4));
+
+    return `${((currentTimeInMinutes - prevItemTimeInMinutes) / (24 * 60)) * 100}%`;
+  };
 
   return (
     <div key={v4()} className={c.container}>
-      {props.timeline.events.map((event, index) => {
+      {timeline.events.map((event, index) => {
+        const firstTagColor = getColor(event.tags[0]);
         return (
-          <div
-            key={v4()}
-            className={c.event}
-            style={{ width: event.width, backgroundColor: tempColors[index] }}
-          >
-            <div className={c.title} style={{ borderTop: `2px dotted ${tempColors[index]}` }}>
+          <div key={v4()} className={c.event} style={{ width: getWidth(index) }}>
+            <div className={c.title} style={{ borderTopColor: `#${firstTagColor}` }}>
               {event.title}
             </div>
+            {event.tags.length === 1 ? (
+              <div style={{ height: "100%", backgroundColor: `#${firstTagColor}` }} />
+            ) : (
+              event.tags.map((tagId) => (
+                <div
+                  key={v4()}
+                  style={{
+                    height: `${(100 / event.tags.length).toFixed(3)}%`,
+                    backgroundColor: `#${getColor(tagId)}`,
+                  }}
+                />
+              ))
+            )}
             <div className={c.timeStampsBox}></div>
           </div>
         );
@@ -49,7 +59,7 @@ export default function Timeline(props: { timeline: Timeline }) {
   );
 }
 
-const useStyles = makeStyles((theme: any) => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     backgroundColor: "#f1f1f1",
     padding: 0,
@@ -68,6 +78,11 @@ const useStyles = makeStyles((theme: any) => ({
     fontSize: 9,
     transform: "rotate(-270deg)",
     minWidth: 140,
+    borderTopWidth: 2,
+    borderTopStyle: "dotted",
+    [theme.tabletSize]: {
+      // borderTopWidth: 1,
+    },
   },
   timeStampsBox: {},
 }));

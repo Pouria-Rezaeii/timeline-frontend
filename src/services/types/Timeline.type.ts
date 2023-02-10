@@ -1,10 +1,6 @@
+import {Event} from "./Event.type";
+
 export interface Timeline {
   date: string;
-  events: {
-    _id: string;
-    title: string;
-    localTime: string;
-    tags: string[];
-    description?: string;
-  }[];
+  events: Event[];
 }

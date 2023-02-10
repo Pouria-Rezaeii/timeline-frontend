@@ -1,18 +1,20 @@
 import React from "react";
-import { makeStyles } from "@mui/styles";
-import { headerHeight, headerHeightSmall } from "../services/sizes";
-import EventModal from "./EventModal";
-import { useDeviceSize } from "../services/hooks/useDeviceSize";
+import {makeStyles} from "@mui/styles";
+import {headerHeight, headerHeightSmall} from "../services/sizes";
+import EventModal from "./modals/EventModal";
+import {useDeviceSize} from "../services/hooks/useDeviceSize";
 import clsx from "clsx";
 import IconButton from "./IconButton";
-import TagModal from "./TagModal";
-import { axios } from "../services/axios";
-import { Tag } from "../services/types/Tag.type";
+import TagModal from "./modals/TagModal";
+import Spinner from "./Spinner";
+import {useLoading} from "../services/contexts/LoadingContenxt";
+import {Link} from "react-router-dom";
 
 export default function Navigation() {
   const [shodEventModal, setShowEventModal] = React.useState(false);
   const [shodTagModal, setShowTagModal] = React.useState(false);
-  const { isTabletSize } = useDeviceSize();
+  const {isTabletSize} = useDeviceSize();
+  const {isLoading} = useLoading();
   const c = useStyles();
 
   const handleToggleEventModal = () => setShowEventModal((prev) => !prev);
@@ -23,33 +25,43 @@ export default function Navigation() {
       {isTabletSize ? (
         <div className={clsx(c.container, c.smallDevices)}>
           <div className={c.logoBox}>
-            <img src="/timeline.svg" className={c.logo} />
+            <a href='/'>
+              <img src='/timeline.svg' className={c.logo} />
+              <span>Timeline</span>
+            </a>
           </div>
           <button className={c.buttonCircle} onClick={handleToggleEventModal}>
-            Submit Event
+            {isLoading ? <Spinner /> : "Submit Event"}
           </button>
           <div className={c.iconsBox}>
             <IconButton onClick={handleToggleTagModal}>
-              <img src="/tag.svg" width={24} height={24} />
+              <img src='/tag.svg' width={24} height={24} />
             </IconButton>
             <IconButton>
-              <img src="/filter.svg" width={24} height={24} />
+              <img src='/filter.svg' width={24} height={24} />
             </IconButton>
           </div>
         </div>
       ) : (
-        <div className={clsx(c.container, c.largeDevices)} style={{ height: headerHeight }}>
+        <div className={clsx(c.container, c.largeDevices)} style={{height: headerHeight}}>
           <div className={c.flexBox}>
-            <img src="/timeline.svg" className={c.logo} />
-            <h1 className={c.title}>T.i.m.e.L.i.n.e</h1>
+            <a href='/'>
+              <img src='/timeline.svg' className={c.logo} />
+            </a>
+            <h1 className={c.title}>T.i.m.e.l.i.n.e</h1>
           </div>
           <div>
             <button className={c.button} onClick={handleToggleTagModal}>
               Create Tag
             </button>
             <button className={c.button}>Filters</button>
-            <button className={c.button} onClick={handleToggleEventModal}>
-              Submit Event
+            <button
+              className={c.button}
+              // temporary for desktop size
+              style={{minWidth: 60, height: isLoading ? 33 : undefined}}
+              onClick={handleToggleEventModal}
+            >
+              {isLoading ? <Spinner size='small' style={{lineHeight: 0.5}} /> : "Submit Event"}
             </button>
           </div>
         </div>
@@ -82,8 +94,8 @@ const useStyles = makeStyles((theme) => ({
   smallDevices: {
     bottom: 0,
     height: headerHeightSmall,
-    paddingRight: 8,
-    paddingLeft: 8,
+    paddingRight: 12,
+    paddingLeft: 12,
   },
   title: {
     margin: 0,
@@ -103,6 +115,9 @@ const useStyles = makeStyles((theme) => ({
     color: "#fff",
     cursor: "pointer",
     marginRight: ".75rem",
+    display: "inline-flex",
+    justifyContent: "center",
+    minWidth: 30,
     outline: "none",
   },
   buttonCircle: {
@@ -132,13 +147,21 @@ const useStyles = makeStyles((theme) => ({
   },
   logoBox: {
     width: 100,
+    transform: "translateY(-8px)",
     textAlign: "left",
+    "& span": {
+      color: "#fff",
+      fontSize: 11,
+      paddingLeft: 7,
+      letterSpacing: 2.8,
+    },
   },
   logo: {
     width: 60,
     [theme.tabletSize]: {
       width: 70,
       marginLeft: ".25rem",
+      marginBottom: -22,
     },
   },
 }));

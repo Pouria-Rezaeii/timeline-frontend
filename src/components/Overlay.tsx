@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@mui/styles";
+import {makeStyles} from "@mui/styles";
 
 interface BackdropProps {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ export default function Overlay(props: BackdropProps) {
 
 const useStyles = makeStyles({
   container: {
-    backgroundColor: "#00000066",
+    backgroundColor: "#00000088",
     position: "fixed",
     zIndex: 1100,
     width: "100vw",
@@ -34,8 +34,6 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    // paddingTop: "15vh",
-
-    backdropFilter: "blur(1px)",
+    backdropFilter: "blur(2px)",
   },
 });

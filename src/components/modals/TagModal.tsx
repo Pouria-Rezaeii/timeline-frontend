@@ -1,9 +1,11 @@
 import React from "react";
-import { makeStyles } from "@mui/styles";
-import Overlay from "./Overlay";
-import { axios } from "../services/axios";
+import {makeStyles} from "@mui/styles";
+import Overlay from "../Overlay";
+import {axios} from "../../services/api/axios";
 import clsx from "clsx";
-import { useTags } from "../services/TagsContext";
+import {useTags} from "../../services/contexts/TagsContext";
+import {Tag} from "../../services/types/Tag.type";
+import {useLoading} from "../../services/contexts/LoadingContenxt";
 
 interface IProps {
   onClickClose?: () => void;
@@ -12,7 +14,8 @@ interface IProps {
 export default function TagModal(props: IProps) {
   const [name, setName] = React.useState("");
   const [color, setColor] = React.useState("");
-  const { revalidateTags } = useTags();
+  const {tags, setTags} = useTags();
+  const {isLoading, addApiLoadingState} = useLoading();
   const c = useStyles();
 
   const handleClose = () => props.onClickClose?.();
@@ -25,26 +28,25 @@ export default function TagModal(props: IProps) {
       alert("Color code is wrong.");
       return;
     }
+
+    const data: Omit<Tag, "_id"> = {name, color};
+    addApiLoadingState(true, "newTag");
     axios
-      .post("tags", { name, color })
-      .then(() => {
+      .post<Tag>("tags", data)
+      .then((response) => {
+        setTags([...(tags || []), response.data]);
         props.onClickClose?.();
-        revalidateTags();
-        // alert("Done Bro");
+        // revalidateTags();
       })
-      .catch((err) =>
-        alert(
-          JSON.stringify({ name, color }, null, 4).concat(
-            "\n".concat(JSON.stringify(err.response.data, null, 4))
-          )
-        )
-      );
+      .catch((err) => alert(JSON.stringify(err.response.data, null, 4)))
+      .finally(() => addApiLoadingState(false, "newTag"));
+    props.onClickClose?.();
   };
 
   return (
     <Overlay onClickBackdrop={handleClose}>
       <div className={c.container}>
-        <div style={{ textAlign: "center" }}>
+        <div style={{textAlign: "center"}}>
           <p className={c.title}>Create New Tag</p>
           <div className={c.line} />
         </div>
@@ -52,20 +54,20 @@ export default function TagModal(props: IProps) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           className={c.textInput}
-          placeholder="Tag Name"
+          placeholder='Tag Name'
         />
         <input
           value={color}
           onChange={(e) => setColor(e.target.value)}
           className={c.textInput}
-          placeholder="Color Code"
+          placeholder='Color Code'
         />
-        <div className={c.colorBox} style={{ backgroundColor: `#${color}` }} />
+        <div className={c.colorBox} style={{backgroundColor: `#${color}`}} />
         <div className={c.buttonsBox}>
           <button className={clsx(c.button, c.reject)} onClick={handleClose}>
             Cancel
           </button>
-          <button className={clsx(c.button, c.accept)} onClick={handleAccept}>
+          <button className={clsx(c.button, c.accept)} onClick={handleAccept} disabled={isLoading}>
             Submit
           </button>
         </div>
@@ -84,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     gap: 12,
     backgroundColor: "#fff",
     borderRadius: 4,
-    boxShadow: "2px 4px 4px 2px #888",
+    boxShadow: "2px 4px 4px 2px #666",
   },
   title: {
     fontWeight: 500,

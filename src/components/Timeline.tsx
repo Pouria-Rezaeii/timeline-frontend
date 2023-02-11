@@ -42,13 +42,11 @@ export default function Timeline({timeline}: IProps) {
 
           return (
             <div key={v4()} className={c.event} style={{width: `${width}%`}}>
-              <div className={c.title} style={{borderTopColor: firstTagColor}}>
-                <span
-                  style={{opacity: width > (isMobileSize ? 2.2 : isTabletSize ? 1.4 : 0.8) ? 1 : 0}}
-                >
+              {width > (isMobileSize ? 2.2 : isTabletSize ? 1.4 : 0.8) && (
+                <div className={c.title} style={{borderTopColor: firstTagColor}}>
                   {event.title}
-                </span>
-              </div>
+                </div>
+              )}
               {event.tags.length === 1 ? (
                 <div style={{height: "100%", backgroundColor: firstTagColor}} />
               ) : (

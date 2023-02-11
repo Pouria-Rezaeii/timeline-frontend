@@ -1,7 +1,7 @@
 import React from "react";
-import { makeStyles } from "@mui/styles";
+import {makeStyles} from "@mui/styles";
 import Navigation from "../components/Navigation";
-import { headerHeight } from "../services/sizes";
+import {headerHeight} from "../services/sizes";
 import Timelines from "../components/Timelines";
 
 export default function Home() {
@@ -28,7 +28,7 @@ const styles = makeStyles((theme) => ({
     [theme.mobileSize]: {
       marginTop: 0,
       padding: "1rem",
-      paddingTop: "12rem",
+      paddingTop: "11rem",
     },
   },
   input: {

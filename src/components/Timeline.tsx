@@ -127,6 +127,9 @@ const useStyles = makeStyles((theme) => ({
     borderTopStyle: "dashed",
     // borderTopWidth: 2,
     // borderTopStyle: "dotted",
+    [theme.tabletSize]: {
+      right: -62,
+    },
   },
   timeStampsBox: {
     display: "flex",

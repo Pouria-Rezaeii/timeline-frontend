@@ -147,12 +147,16 @@ const useStyles = makeStyles((theme) => ({
   },
   logoBox: {
     width: 100,
-    transform: "translateY(-8px)",
+    height: "100%",
+    overflow: "hidden",
     textAlign: "left",
+    "& *": {
+      transform: "translateY(-8px)",
+    },
     "& span": {
       color: "#fff",
       fontSize: 11,
-      paddingLeft: 7,
+      marginLeft: 7,
       letterSpacing: 2.8,
     },
   },
@@ -161,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.tabletSize]: {
       width: 70,
       marginLeft: ".25rem",
-      marginBottom: -22,
+      marginBottom: -30,
     },
   },
 }));

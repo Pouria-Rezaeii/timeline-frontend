@@ -9,6 +9,7 @@ import {CreateEvent, Event} from "../../services/types/Event.type";
 import {useTags} from "../../services/contexts/TagsContext";
 import {useTimelines} from "../../services/contexts/TimelinesContext";
 import {useLoading} from "../../services/contexts/LoadingContenxt";
+import {useDeviceSize} from "../../services/hooks/useDeviceSize";
 
 interface IProps {
   onClickClose?: () => void;
@@ -25,6 +26,7 @@ export default function EventModal(props: IProps) {
   const {tags} = useTags();
   const {timelines, setTimelines, revalidateTimelines} = useTimelines();
   const {isLoading, addApiLoadingState} = useLoading();
+  const {isTabletSize} = useDeviceSize();
   const c = useStyles();
 
   const handleClose = () => props.onClickClose?.();
@@ -68,7 +70,7 @@ export default function EventModal(props: IProps) {
   };
 
   return (
-    <Overlay onClickBackdrop={handleClose}>
+    <Overlay onClickBackdrop={!isTabletSize ? handleClose : undefined}>
       <div className={c.container}>
         <div style={{textAlign: "center"}}>
           <p className={c.title}>Close Current Event</p>
@@ -94,7 +96,10 @@ export default function EventModal(props: IProps) {
         />
         <Select
           values={selectedTags}
-          options={(tags || []).map((item) => ({label: item.name, value: item._id}))}
+          options={(tags || [])
+            .slice()
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((item) => ({label: item.name, value: item._id}))}
           onChange={(values) => setSelectedTags(values as any)}
           multi
           style={{maxWidth: 250}}

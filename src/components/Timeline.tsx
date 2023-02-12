@@ -42,7 +42,7 @@ export default function Timeline({timeline}: IProps) {
 
           return (
             <div key={v4()} className={c.event} style={{width: `${width}%`}}>
-              {width > (isMobileSize ? 2.2 : isTabletSize ? 1.4 : 0.8) && (
+              {width > (isMobileSize ? 2.8 : isTabletSize ? 1.4 : 0.8) && (
                 <div className={c.title} style={{borderTopColor: firstTagColor}}>
                   {event.title}
                 </div>

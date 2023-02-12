@@ -6,6 +6,7 @@ import clsx from "clsx";
 import {useTags} from "../../services/contexts/TagsContext";
 import {Tag} from "../../services/types/Tag.type";
 import {useLoading} from "../../services/contexts/LoadingContenxt";
+import {useDeviceSize} from "../../services/hooks/useDeviceSize";
 
 interface IProps {
   onClickClose?: () => void;
@@ -16,6 +17,7 @@ export default function TagModal(props: IProps) {
   const [color, setColor] = React.useState("");
   const {tags, setTags} = useTags();
   const {isLoading, addApiLoadingState} = useLoading();
+  const {isTabletSize} = useDeviceSize();
   const c = useStyles();
 
   const handleClose = () => props.onClickClose?.();
@@ -44,7 +46,7 @@ export default function TagModal(props: IProps) {
   };
 
   return (
-    <Overlay onClickBackdrop={handleClose}>
+    <Overlay onClickBackdrop={!isTabletSize ? handleClose : undefined}>
       <div className={c.container}>
         <div style={{textAlign: "center"}}>
           <p className={c.title}>Create New Tag</p>

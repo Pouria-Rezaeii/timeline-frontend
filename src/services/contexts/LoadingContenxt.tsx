@@ -15,7 +15,7 @@ const loadingContext = React.createContext<InitialValue>({
 });
 
 export default function LoadingProvider({children}: React.PropsWithChildren<{}>) {
-  const [isLoading, setLoading] = React.useState<boolean>(true);
+  const [isLoading, setLoading] = React.useState<boolean>(false);
   const [queue, setQueue] = React.useState<Queue[]>([]);
 
   const addApiLoadingState = (isPending: boolean, key: string) => {
@@ -24,8 +24,11 @@ export default function LoadingProvider({children}: React.PropsWithChildren<{}>)
     } else {
       setQueue((prev) => prev.filter((item) => item.key !== key));
     }
-    setLoading(queue.length ? true : false);
   };
+
+  React.useEffect(() => {
+    setLoading(queue.length > 0);
+  }, [queue.length]);
 
   return (
     <loadingContext.Provider value={{isLoading, addApiLoadingState}}>

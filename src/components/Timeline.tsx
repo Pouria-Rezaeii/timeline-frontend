@@ -119,16 +119,16 @@ const useStyles = makeStyles((theme) => ({
   title: {
     position: "absolute",
     bottom: "5.2rem",
-    right: -64,
-    fontSize: 9,
+    right: -65,
+    fontSize: 8,
     transform: "rotate(-270deg)",
     minWidth: 140,
     borderTopWidth: 1,
     borderTopStyle: "dashed",
-    // borderTopWidth: 2,
-    // borderTopStyle: "dotted",
     [theme.tabletSize]: {
-      right: -62,
+      // right: -63,
+      // bottom: "5.1rem",
+      lineHeight: 1,
     },
   },
   timeStampsBox: {

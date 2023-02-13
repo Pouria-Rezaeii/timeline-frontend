@@ -201,7 +201,7 @@ const useStyles = makeStyles((theme) => ({
     },
     "& .react-dropdown-select-dropdown": {
       width: "250px !important",
-      maxHeight: "200px !important",
+      maxHeight: "180px !important",
     },
     "& .react-dropdown-select-item": {
       fontSize: ".875rem",

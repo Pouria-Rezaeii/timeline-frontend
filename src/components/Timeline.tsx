@@ -5,12 +5,17 @@ import {Timeline as TimelineType} from "../services/types/Timeline.type";
 import {useTags} from "../services/contexts/TagsContext";
 import dateFormat from "dateformat";
 import {useDeviceSize} from "../services/hooks/useDeviceSize";
+import EventDetailModal from "./modals/EventDetailModal";
+import TagModal from "./modals/TagModal";
+import {Event} from "../services/types/Event.type";
 
 interface IProps {
   timeline: TimelineType;
 }
 
 export default function Timeline({timeline}: IProps) {
+  const [showEventDetailModal, setShowEventDetailModal] = React.useState(false);
+  const [activeEventIndex, setActiveEventIndex] = React.useState<number | null>(null);
   const {date} = timeline;
   const c = useStyles();
   const {tags} = useTags();
@@ -33,6 +38,19 @@ export default function Timeline({timeline}: IProps) {
     return ((currentTimeInMinutes - prevItemTimeInMinutes) / (24 * 60)) * 100;
   };
 
+  const handleClickEvent = (index: number) => {
+    setActiveEventIndex(index);
+  };
+
+  const handleCloseModal = () => {
+    setShowEventDetailModal(false);
+    setActiveEventIndex(null);
+  };
+
+  React.useEffect(() => {
+    activeEventIndex !== null && setShowEventDetailModal(true);
+  }, [activeEventIndex]);
+
   return (
     <div className={c.container}>
       <div key={v4()} className={c.timeline}>
@@ -41,7 +59,12 @@ export default function Timeline({timeline}: IProps) {
           const width = getWidth(index);
 
           return (
-            <div key={v4()} className={c.event} style={{width: `${width}%`}}>
+            <div
+              key={v4()}
+              className={c.event}
+              style={{width: `${width}%`}}
+              onClick={() => handleClickEvent(index)}
+            >
               {width > (isMobileSize ? 2.8 : isTabletSize ? 1.4 : 0.8) && (
                 <div className={c.title} style={{borderTopColor: firstTagColor}}>
                   {event.title}
@@ -65,17 +88,24 @@ export default function Timeline({timeline}: IProps) {
         })}
       </div>
       <div className={c.timeStampsBox}>
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((time) => (
-          <div key={v4()}>{`${time < 5 ? "0" : ""}${time * 2}`}</div>
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((time, index) => (
+          <React.Fragment key={v4()}>
+            <div>{`${time < 5 ? "0" : ""}${time * 2}`}</div>
+            {index !== 12 && <div>|</div>}
+          </React.Fragment>
         ))}
       </div>
       <span className={c.date}>
-        {date === today
-          ? "Today"
-          : date === String(+today - 1)
-          ? "Yesterday"
-          : `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`}
+        {date === today && <span>Today: </span>}
+        {`${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`}
       </span>
+      {showEventDetailModal && activeEventIndex !== null && (
+        <EventDetailModal
+          event={timeline.events[activeEventIndex]}
+          prevEvent={activeEventIndex !== 0 ? timeline.events[activeEventIndex - 1] : null}
+          onClickClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 }
@@ -104,6 +134,7 @@ export function TimelinePlaceholder() {
 const useStyles = makeStyles((theme) => ({
   container: {
     width: "100%",
+    paddingTop: "9rem",
   },
   timeline: {
     backgroundColor: "#f1f1f1",
@@ -125,15 +156,16 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 140,
     borderTopWidth: 1,
     borderTopStyle: "dashed",
+    direction: "rtl",
+    textAlign: "left",
     [theme.tabletSize]: {
-      // right: -63,
-      // bottom: "5.1rem",
       lineHeight: 1,
     },
   },
   timeStampsBox: {
     display: "flex",
-    width: "100%",
+    width: "calc(100% + 10px)",
+    marginLeft: -5,
     marginTop: 4,
     justifyContent: "space-between",
     "& > *": {

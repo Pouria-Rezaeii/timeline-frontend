@@ -11,8 +11,8 @@ import {useLoading} from "../services/contexts/LoadingContenxt";
 import {Link} from "react-router-dom";
 
 export default function Navigation() {
-  const [shodEventModal, setShowEventModal] = React.useState(false);
-  const [shodTagModal, setShowTagModal] = React.useState(false);
+  const [showEventModal, setShowEventModal] = React.useState(false);
+  const [showTagModal, setShowTagModal] = React.useState(false);
   const {isTabletSize} = useDeviceSize();
   const {isLoading} = useLoading();
   const c = useStyles();
@@ -66,8 +66,8 @@ export default function Navigation() {
           </div>
         </div>
       )}
-      {shodEventModal && <EventModal onClickClose={() => setShowEventModal(false)} />}
-      {shodTagModal && <TagModal onClickClose={() => setShowTagModal(false)} />}
+      {showEventModal && <EventModal onClickClose={() => setShowEventModal(false)} />}
+      {showTagModal && <TagModal onClickClose={() => setShowTagModal(false)} />}
     </>
   );
 }

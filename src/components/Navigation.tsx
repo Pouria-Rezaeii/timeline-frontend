@@ -8,7 +8,6 @@ import IconButton from "./IconButton";
 import TagModal from "./modals/TagModal";
 import Spinner from "./Spinner";
 import {useLoading} from "../services/contexts/LoadingContenxt";
-import {Link} from "react-router-dom";
 
 export default function Navigation() {
   const [showEventModal, setShowEventModal] = React.useState(false);

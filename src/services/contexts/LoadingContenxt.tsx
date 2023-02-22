@@ -15,20 +15,17 @@ const loadingContext = React.createContext<InitialValue>({
 });
 
 export default function LoadingProvider({children}: React.PropsWithChildren<{}>) {
-  const [isLoading, setLoading] = React.useState<boolean>(false);
-  const [queue, setQueue] = React.useState<Queue[]>([]);
+  const [isLoading, setLoading] = React.useState<boolean>(true);
+  const queue = React.useRef<Queue[]>([]);
 
   const addApiLoadingState = (isPending: boolean, key: string) => {
     if (isPending) {
-      setQueue((prev) => [...prev, {key, value: isPending}]);
+      queue.current = [...queue.current, {key, value: isPending}];
     } else {
-      setQueue((prev) => prev.filter((item) => item.key !== key));
+      queue.current = queue.current.filter((item) => item.key !== key);
     }
+    setLoading(queue.current.length > 0);
   };
-
-  React.useEffect(() => {
-    setLoading(queue.length > 0);
-  }, [queue.length]);
 
   return (
     <loadingContext.Provider value={{isLoading, addApiLoadingState}}>

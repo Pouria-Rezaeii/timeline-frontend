@@ -24,11 +24,11 @@ const styles = makeStyles((theme) => ({
   contentBox: {
     marginTop: headerHeight,
     padding: "2rem",
-    paddingTop: "15rem",
+    paddingTop: "6rem",
     [theme.mobileSize]: {
       marginTop: 0,
       padding: "1rem",
-      paddingTop: "11rem",
+      paddingTop: "2rem",
     },
   },
   input: {

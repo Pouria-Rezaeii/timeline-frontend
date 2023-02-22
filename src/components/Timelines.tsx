@@ -29,9 +29,9 @@ export default function Timelines() {
 
 const useStyles = makeStyles((theme) => ({
   timelineBox: {
-    marginBottom: "13rem",
+    marginBottom: "4.5rem",
     [theme.tabletSize]: {
-      marginBottom: "10.5rem",
+      marginBottom: "2.5rem",
     },
     "&:last-of-type": {
       marginBottom: "4rem",

@@ -31,15 +31,4 @@ const styles = makeStyles((theme) => ({
       paddingTop: "2rem",
     },
   },
-  input: {
-    fontSize: 20,
-    padding: 8,
-    fontWeight: 400,
-    fill: "red",
-    border: "none",
-    outline: "none",
-    backgroundColor: "#ddd",
-    borderRadius: 2,
-    cursor: "pointer",
-  },
 }));

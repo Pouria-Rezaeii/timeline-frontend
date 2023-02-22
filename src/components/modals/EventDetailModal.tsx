@@ -17,10 +17,10 @@ interface IProps {
 
 export default function EventDetailModal(props: IProps) {
   const {onClickClose, event, prevEvent} = props;
-  const c = useStyles();
   const {addApiLoadingState} = useLoading();
   const {revalidateTimelines} = useTimelines();
   const {tags} = useTags();
+  const c = useStyles();
 
   const handleEdit = () => {};
 

@@ -21,20 +21,23 @@ export default function TimelinesProvider({children}: React.PropsWithChildren<{}
   const [timelines, setTimelines] = React.useState<Timeline[]>();
   const [queryParams] = useSearchParams();
   const {addApiLoadingState} = useLoading();
-  const to = queryParams.get("to") || dateFormat(new Date(), "yyyymmdd");
-  const from = queryParams.get("from") || Number(to) - 2;
+  const toQParam = queryParams.get("to");
+  const fromQParam = queryParams.get("from");
+  const today = new Date();
+  const from = fromQParam || dateFormat(today.setDate(today.getDate() - 2), "yyyymmdd");
+  const to = toQParam || dateFormat(new Date(), "yyyymmdd");
 
   const fetchTimelines = React.useCallback(() => {
     addApiLoadingState(true, "timelines");
     axios
-      .get<Timeline[]>(`events-by-days?from=${from}&to=${to}`)
-      .then(({data}) => setTimelines(data))
+      .get<{result: Timeline[]; page: number}>(`events-by-days?from=${from}&to=${to}`)
+      .then(({data}) => setTimelines(data.result))
       .finally(() => addApiLoadingState(false, "timelines"));
-  }, []);
+  }, [from, to]);
 
   React.useEffect(() => {
     fetchTimelines();
-  }, []);
+  }, [fromQParam, toQParam]);
 
   return (
     <timelinesContext.Provider

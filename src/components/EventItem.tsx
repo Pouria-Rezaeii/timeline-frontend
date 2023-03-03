@@ -3,10 +3,6 @@ import {Event} from "../services/types/Event.type";
 import {makeStyles} from "@mui/styles";
 import {Tag} from "../services/types/Tag.type";
 
-function getColor(id: string, tags?: Tag[]) {
-  return tags?.find((item) => item._id === id)?.color;
-}
-
 interface IProps {
   event: Event;
   showTitle: boolean;
@@ -54,6 +50,10 @@ export function EventPlaceholder() {
   );
 }
 
+function getColor(id: string, tags?: Tag[]) {
+  return tags?.find((item) => item._id === id)?.color;
+}
+
 const useStyles = makeStyles((theme) => ({
   event: {
     height: "100%",
@@ -61,8 +61,8 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     position: "absolute",
-    bottom: "5.2rem",
-    right: -65,
+    bottom: "5.25rem",
+    right: -66,
     fontSize: 8,
     transform: "rotate(-270deg)",
     minWidth: 140,

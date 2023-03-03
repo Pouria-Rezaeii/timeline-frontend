@@ -8,16 +8,19 @@ import IconButton from "./IconButton";
 import TagModal from "./modals/TagModal";
 import Spinner from "./Spinner";
 import {useLoading} from "../services/contexts/LoadingContenxt";
+import TimelineSettingModal from "./modals/TimelineSettingModal";
 
 export default function Navigation() {
   const [showEventModal, setShowEventModal] = React.useState(false);
   const [showTagModal, setShowTagModal] = React.useState(false);
+  const [showSettingModal, setShowSettingModal] = React.useState(false);
   const {isTabletSize} = useDeviceSize();
   const {isLoading} = useLoading();
   const c = useStyles();
 
   const handleToggleEventModal = () => setShowEventModal((prev) => !prev);
   const handleToggleTagModal = () => setShowTagModal((prev) => !prev);
+  const handleToggleSettingModal = () => setShowSettingModal((prev) => !prev);
 
   return (
     <>
@@ -36,7 +39,7 @@ export default function Navigation() {
             <IconButton onClick={handleToggleTagModal}>
               <img src='/tag.svg' width={24} height={24} />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={handleToggleSettingModal}>
               <img src='/filter.svg' width={24} height={24} />
             </IconButton>
           </div>
@@ -67,6 +70,7 @@ export default function Navigation() {
       )}
       {showEventModal && <EventModal onClickClose={() => setShowEventModal(false)} />}
       {showTagModal && <TagModal onClickClose={() => setShowTagModal(false)} />}
+      {showSettingModal && <TimelineSettingModal onClickClose={() => setShowSettingModal(false)} />}
     </>
   );
 }
